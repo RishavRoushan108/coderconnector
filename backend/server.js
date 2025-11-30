@@ -7,9 +7,14 @@ import connectdb from "./database.js";
 
 
 
-app.get("/signin",async (req,res)=>{
-    res.send("signin ...")
-})
+app.use(express.json())
+
+
+import authRouter from "./routes/auth.js";
+// import profileRouter from "./routes/profile.js";
+
+app.use("/",authRouter);
+// app.use("/",profileRouter)
 
 
 

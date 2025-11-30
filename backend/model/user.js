@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
-import validator, { isLowercase } from "validator"
+import validator from "validator"
+import bcrypt from "bcrypt"
 
 const userschema=new mongoose.Schema(
     {
-        firsName:{
+        firstName:{
             type:String,
             required:true,
             minlenght:5,
@@ -12,12 +13,11 @@ const userschema=new mongoose.Schema(
         },
         lastName:{
             type:String,
-            required:false,
             minlenght:5,
             maxlength:30,
             index:true
         },
-        email:{
+        emailId:{
             type:String,
             required:true,
             index:true,
@@ -76,13 +76,19 @@ const userschema=new mongoose.Schema(
         },
         nationality:{
             type:String,
-            default:indian
+            default:"indian"
         }
     },
     {
         timestamps:true
     }
 )
+
+userschema.methods.validatepassword=async function (password) {
+    const user=this;
+    const hashedpassword=user.password
+    return await bcrypt.compare(password,hashedpassword);
+}
 
 const usermodel=mongoose.model("user",userschema);
 
