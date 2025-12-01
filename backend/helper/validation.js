@@ -13,3 +13,20 @@ export const validatesignup=(req)=>{
     }
 }
 
+export const validateprofileedit=(req)=>{
+    const allowedfield=["firstName","lastName","about","age","gender","skill","about"];
+    const userupdateddata=req.body;
+    const isvalidentity=Object.keys(userupdateddata).forEach((field)=>{
+         allowedfield.includes(field)
+    })
+    return isvalidentity;
+}
+
+export const validatepasswordchange=(req)=>{
+    const allowedfield=[currentpassword,newpassword];
+    const userrequest=req.body;
+    const isvalidrequest=Object.keys(userrequest).forEach((field)=>{
+        allowedfield.includes(field)
+    })
+    return isvalidrequest
+}

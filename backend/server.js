@@ -5,17 +5,17 @@ import dotenv from "dotenv"
 dotenv.config()
 import connectdb from "./database.js";
 
-
+import cookieParser from "cookie-parser";
+app.use(cookieParser())
 
 app.use(express.json())
 
 
 import authRouter from "./routes/auth.js";
-// import profileRouter from "./routes/profile.js";
+import profileRouter from "./routes/profile.js";
 
 app.use("/",authRouter);
-// app.use("/",profileRouter)
-
+app.use("/",profileRouter)
 
 
 connectdb()
