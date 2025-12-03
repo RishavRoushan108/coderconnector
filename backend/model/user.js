@@ -12,20 +12,17 @@ const userschema=new mongoose.Schema(
             type:String,
             required:true,
             minlenght:5,
-            maxlength:30,
-            index:true
+            maxlength:30
         },
         lastName:{
             type:String,
             minlenght:5,
-            maxlength:30,
-            index:true
+            maxlength:30
         },
         emailId:{
             type:String,
             required:true,
-            index:true,
-            unique:true,
+            unique:true, // it automatically make index of emailId
             lowercase:true,
             trim:true,
             validate(value){
@@ -46,6 +43,7 @@ const userschema=new mongoose.Schema(
         phoneNo:{
             type:String,
             required:true,
+            index:true,
             validate(value){
                 if(!validator.isMobilePhone(value,"en-IN")){
                     throw new Error("enter valid phoneNumber")

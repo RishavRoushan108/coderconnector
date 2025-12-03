@@ -13,10 +13,11 @@ app.use(express.json())
 
 import authRouter from "./routes/auth.js";
 import profileRouter from "./routes/profile.js";
+import requestRoute from "./routes/request.js";
 
 app.use("/",authRouter);
 app.use("/",profileRouter)
-
+app.use("/",requestRoute)
 
 connectdb()
 .then(()=>{
