@@ -1,7 +1,8 @@
 import express from "express"
 import userauth from "../middleware/jwt.js";
-import {validaterequestsend,validateuserid,isconnectionalreadyestablished} from "../helper/validation.js"
+import {validaterequestsend,validateuserid,isconnectionalreadyestablished,validatereview} from "../helper/validation.js"
 import connectionrequestmodel from "../model/connectionrequest.js";
+import mongoose from "mongoose";
 const requestRoute=express.Router();
 
 
@@ -9,8 +10,7 @@ const requestRoute=express.Router();
 requestRoute.post("/request/send/:status/:touserId",userauth,async(req,res)=>{
     try{
         const fromuserId=req.user._id;
-        const touserId=req.params.touserId;
-        const status=req.params.status;
+        const {touserId,status}=req.params;
     
         if(!validaterequestsend(status,touserId)){
            throw new Error("invlid status");
@@ -42,5 +42,24 @@ requestRoute.post("/request/send/:status/:touserId",userauth,async(req,res)=>{
     }
 })
 
+requestRoute.post("/request/review/:status/:connectionId",userauth,async(req,res)=>{
+    try{
+        const {status,connectionId}=req.params;
+        await validatereview(status);
+        const connection=await connectionrequestmodel.findOne({
+            _id:connectionId,
+            touserId:req.user._id,
+            status:"intrested"
+        });
+        if(!connection){
+            throw new Error("invalid connectionId");
+        }
+        connection.status=status;
+        connection.save();
+        res.status(200).send("your review become successful");
+    }catch(err){
+        res.status(400).send("review failed "+err.message);
+    }
+})
 
 export default requestRoute;

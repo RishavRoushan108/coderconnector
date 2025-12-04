@@ -56,3 +56,11 @@ export const isconnectionalreadyestablished=async (fromuserId,touserId)=>{
     )
     return connection;
 }
+
+export const validatereview=async (status)=>{
+    const allowedfield=["accepted","rejected"];
+    const isstatusvalid=allowedfield.includes(status);
+    if(!isstatusvalid){
+        throw new Error("invalid status")
+    }
+}
