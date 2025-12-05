@@ -3,10 +3,12 @@ import mongoose from "mongoose";
 const connectionrequestschema=new mongoose.Schema({
     fromuserId:{
         type:mongoose.Schema.Types.ObjectId,
+        ref:"user",
         required:true
     },
     touserId:{
         type:mongoose.Schema.Types.ObjectId,
+        ref:"user",
         required:true
     },
     status:{
