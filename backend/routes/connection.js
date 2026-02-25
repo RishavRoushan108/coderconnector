@@ -1,7 +1,11 @@
 import express from "express"
 import userauth from "../middleware/jwt.js";
 import connectionrequestmodel from "../model/connectionrequest.js";
+import { set } from "mongoose";
+import usermodel from "../model/user.js";
 const connectionRoute= express.Router()
+
+const SAVE_DATA= "firstName lastName photo age gender about skills "
 
 connectionRoute.get("/user/request/recieved",userauth,async(req,res)=>{
     try{
@@ -37,6 +41,32 @@ connectionRoute.get("/user/connection",userauth,async(req,res)=>{
         res.status(200).send("list of your connection"+connectionlist)
     }catch(err){
         res.status(400).send("connot get the list of your connection "+err.message);
+    }
+})
+
+connectionRoute.get("/user/feed",userauth,async(req,res)=>{
+    try{
+        const loggedinuser=req.user;
+        const connectedpeople=await connectionrequestmodel.find(
+            {$or:[
+                {fromuserId:loggedinuser._id},
+                {touserId:loggedinuser._id}
+            ]}
+        )
+        const excludefromfeed=new Set();
+        connectedpeople.forEach((obj)=>{
+            excludefromfeed.add(obj.fromuserId.toString());
+            excludefromfeed.add(obj.touserId.toString())
+        })
+        const user=await usermodel.find(
+            {$and:[
+                {_id:{$nin:Array.from(excludefromfeed)}},
+                {_id:{$ne:loggedinuser._id}}
+            ]}
+        ).select(SAVE_DATA)
+        res.status(200).send("the list of feed are "+user);
+    }catch(err){
+        res.status(400).send("cannot load the feed "+err.message)
     }
 })
 

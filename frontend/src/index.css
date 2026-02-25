@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+.input-style {
+  @apply w-full px-4 py-2 rounded-lg bg-[#0d1b2a] text-white outline-none focus:ring-2 focus:ring-[#778da9];
+}
