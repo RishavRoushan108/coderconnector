@@ -1,8 +1,27 @@
+import axios from "axios";
 import React from "react";
+import { BASE_URL } from "../util/constant";
+import { useDispatch } from "react-redux";
+import { removefeed } from "../util/feedslice";
 
 const Card = ({ formData }) => {
+  const dispatch = useDispatch();
+  const { _id } = formData;
+  const handleconnection = async (status) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "/request/send/" + status + "/" + _id,
+        {},
+        { withCredentials: true },
+      );
+      console.log(response);
+      dispatch(removefeed(_id));
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
-    <div>
+    <div className="my-10 ">
       <div className="text-gray-400 w-[90%] mx-auto mt-7 py-2 px-2 md:ml-[2%] md:my-auto bg-[#0e1c35] rounded-2xl">
         <img
           src={formData.photo}
@@ -35,12 +54,18 @@ const Card = ({ formData }) => {
           </p>
           {/* Accept / Reject Buttons */}
           <div className="flex justify-center gap-4 mt-4">
-            <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
-              Accept
+            <button
+              onClick={() => handleconnection("intrested")}
+              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+            >
+              Intrested
             </button>
 
-            <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
-              Reject
+            <button
+              onClick={() => handleconnection("ignored")}
+              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+            >
+              Ignore
             </button>
           </div>
         </div>

@@ -22,7 +22,6 @@ profileRouter.patch("/profile/edit", userauth, async (req, res) => {
     // if (!validateprofileedit) {
     //   throw new Error("invalid entity to update");
     // }
-    console.log("1");
     const loggedinuser = req.user;
     const updateddata = req.body;
     Object.keys(updateddata).forEach((field) => {

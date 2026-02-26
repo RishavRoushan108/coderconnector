@@ -41,14 +41,9 @@ const userschema = new mongoose.Schema(
       },
     },
     phoneNo: {
-      type: String,
+      type: Number,
       required: true,
       index: true,
-      validate(value) {
-        if (!validator.isMobilePhone(value, "en-IN")) {
-          throw new Error("enter valid phoneNumber");
-        }
-      },
     },
     age: {
       type: Number,
@@ -64,11 +59,6 @@ const userschema = new mongoose.Schema(
     },
     photo: {
       type: String,
-      validate(value) {
-        if (validator.isURL(value)) {
-          throw new Error("invalid photo url address" + value);
-        }
-      },
     },
     about: {
       type: String,

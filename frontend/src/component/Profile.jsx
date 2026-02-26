@@ -61,7 +61,7 @@ const Profile = () => {
   };
   return (
     <div className="flex flex-col md:flex-row md:gap-20">
-      <div className="text-gray-400 w-[90%] mx-auto mt-7 py-2 px-2 md:ml-[2%] md:my-auto bg-[#0e1c35] rounded-2xl">
+      <div className="text-gray-400 w-[90%] md:w-120 lg:w-200 mx-auto mt-7 py-2 px-2 md:ml-[2%] md:my-auto bg-[#0e1c35] rounded-2xl">
         <img
           src={formData.photo}
           alt="profile"
@@ -94,11 +94,11 @@ const Profile = () => {
           {/* Accept / Reject Buttons */}
           <div className="flex justify-center gap-4 mt-4">
             <button className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
-              Accept
+              Intrested
             </button>
 
             <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
-              Reject
+              Ignore
             </button>
           </div>
         </div>

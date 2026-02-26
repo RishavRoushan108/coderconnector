@@ -24,6 +24,11 @@ authRouter.post("/signup", async (req, res) => {
       nationality,
     } = req.body;
     const bcryptedpassword = await bcrypt.hash(password, 10);
+    let arr = [];
+
+    if (skills) {
+      arr = skills.split(",").map((skill) => skill.trim());
+    }
     const user = new usermodel({
       firstName,
       lastName,
@@ -34,7 +39,7 @@ authRouter.post("/signup", async (req, res) => {
       gender,
       photo,
       about,
-      skills,
+      skills: arr,
       nationality,
     });
     await user.save();

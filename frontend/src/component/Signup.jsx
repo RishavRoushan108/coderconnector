@@ -49,6 +49,7 @@ const Signup = () => {
       navigate("/login");
     } catch (err) {
       console.log(err);
+      //main error is that i have to show as toast is err.response.data
     }
   };
 
