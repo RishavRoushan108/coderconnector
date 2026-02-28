@@ -31,8 +31,8 @@ connectionRoute.get("/user/connection", userauth, async (req, res) => {
           { touserId: req.user._id, status: "accepted" },
         ],
       })
-      .populate("fromuserId", "firstName lastName")
-      .populate("touserId", "firstName lastName");
+      .populate("fromuserId", "firstName lastName age gender photo about")
+      .populate("touserId", "firstName lastName age gender photo about");
 
     const data = connectionlist.map((row) => {
       if (row.fromuserId._id.toString() === req.user._id.toString()) {
@@ -42,11 +42,9 @@ connectionRoute.get("/user/connection", userauth, async (req, res) => {
       }
     });
 
-    res.status(200).send("list of your connection" + connectionlist);
+    res.status(200).json({ data });
   } catch (err) {
-    res
-      .status(400)
-      .send("connot get the list of your connection " + err.message);
+    res.status(400).json({ err });
   }
 });
 

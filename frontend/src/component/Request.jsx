@@ -2,17 +2,27 @@ import axios from "axios";
 import { BASE_URL } from "../util/constant";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { store } from "../util/appstore";
-import { addrequest } from "../util/requestslice";
+import { addrequest, removerequest } from "../util/requestslice";
 const Request = () => {
   const dispatch = useDispatch();
   const connectionrequestlist = useSelector((store) => store.request);
+  const handlereview = async (status, _id) => {
+    try {
+      const res = await axios.post(
+        BASE_URL + "/request/review/" + status + "/" + _id,
+        {},
+        { withCredentials: true },
+      );
+      dispatch(removerequest(_id));
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const LoadRequest = async () => {
     try {
       const res = await axios.get(BASE_URL + "/user/request/recieved", {
         withCredentials: true,
       });
-      console.log(res.data.connectionrecieved);
       dispatch(addrequest(res.data.connectionrecieved));
     } catch (err) {
       console.log(err);
@@ -62,11 +72,17 @@ const Request = () => {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-2 md:gap-3 lg:mr-[2%]">
-                  <button className="rounded-lg bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-green-600">
+                  <button
+                    onClick={() => handlereview("accepted", item._id)}
+                    className="rounded-lg bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-green-600"
+                  >
                     Accept
                   </button>
 
-                  <button className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600">
+                  <button
+                    onClick={() => handlereview("rejected", item._id)}
+                    className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600"
+                  >
                     Reject
                   </button>
 
@@ -83,7 +99,7 @@ const Request = () => {
           <h2 className="text-xl font-semibold text-gray-800">
             You’re all caught up
           </h2>
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-2 text-sm text-gray-300">
             New users will appear here as they send request.
           </p>
         </div>

@@ -69,9 +69,9 @@ requestRoute.post(
       }
       connection.status = status;
       connection.save();
-      res.status(200).send("your review become successful");
+      res.status(200).json({ message: "review send successfully" });
     } catch (err) {
-      res.status(400).send("review failed " + err.message);
+      res.status(400).json({ err });
     }
   },
 );
