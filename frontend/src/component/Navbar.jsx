@@ -42,16 +42,37 @@ const Navbar = () => {
           {!publicRoutes.includes(location.pathname) && open && (
             <div className="absolute right-0 mt-3 w-40 bg-white rounded-lg shadow-lg py-2">
               <p
-                onClick={() => navigate("/feed")}
+                onClick={() => {
+                  navigate("/feed");
+                  setOpen(false);
+                }}
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
               >
                 Feed
               </p>
               <p
-                onClick={() => navigate("/profile")}
+                onClick={() => {
+                  (navigate("/profile"), setOpen(false));
+                }}
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
               >
                 Profile
+              </p>
+              <p
+                onClick={() => {
+                  (navigate("/connections"), setOpen(false));
+                }}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              >
+                Connections
+              </p>
+              <p
+                onClick={() => {
+                  (navigate("/request"), setOpen(false));
+                }}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              >
+                Requests
               </p>
               <p
                 onClick={handleLogout}

@@ -11,9 +11,6 @@ const Feed = () => {
   const dispatch = useDispatch();
   const getfeed = async () => {
     try {
-      if (feed) {
-        return;
-      }
       const result = await axios.get(BASE_URL + "/user/feed", {
         withCredentials: true,
       });
@@ -28,11 +25,21 @@ const Feed = () => {
     getfeed();
   }, []);
   return (
-    <div>
+    <div className="w-[90%] flex justify-center items-center">
       {feed != null && feed.length != 0 ? (
-        <Card formData={feed[0]} />
+        <div className="w-[60%] mx-auto flex justify-center items-center">
+          <Card formData={feed[0]} />
+        </div>
       ) : (
-        <h1>no feed</h1>
+        <div>
+          <div className="flex flex-col items-center justify-centertext-center">
+            <h2 className="text-3xl font-bold text-gray-900">No posts yet</h2>
+            <p className="mt-2 text-sm text-gray-300">
+              Your feed is currently empty. You’ve viewed all available users.
+              New profiles will appear here as they join
+            </p>
+          </div>
+        </div>
       )}
     </div>
   );

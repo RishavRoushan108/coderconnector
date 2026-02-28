@@ -15,10 +15,10 @@ connectionRoute.get("/user/request/recieved", userauth, async (req, res) => {
         touserId: req.user._id,
         status: "intrested",
       })
-      .populate("fromuserId", "firstName lastName");
-    res.status(200).send("the request you receive are " + connectionrecieved);
+      .populate("fromuserId", "firstName lastName age gender photo about");
+    res.status(200).json({ connectionrecieved });
   } catch (err) {
-    res.status(400).send("cannot get the connection request " + err.message);
+    res.status(400).json({ err });
   }
 });
 

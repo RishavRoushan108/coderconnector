@@ -6,6 +6,8 @@ import { store } from "./util/appstore";
 import { Provider } from "react-redux";
 import Signup from "./component/Signup";
 import Feed from "./component/Feed";
+import Connections from "./component/Connections";
+import Request from "./component/Request";
 // import { Toaster } from "react-hot-toast";
 
 const Core = () => {
@@ -29,6 +31,8 @@ const Core = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/feed" element={<Feed />} />
+              <Route path="/connections" element={<Connections />} />
+              <Route path="/request" element={<Request />} />
             </Route>
           </Routes>
         </BrowserRouter>

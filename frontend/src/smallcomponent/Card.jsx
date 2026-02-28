@@ -21,8 +21,8 @@ const Card = ({ formData }) => {
     }
   };
   return (
-    <div className="my-10 ">
-      <div className="text-gray-400 w-[90%] mx-auto mt-7 py-2 px-2 md:ml-[2%] md:my-auto bg-[#0e1c35] rounded-2xl">
+    <div className="my-10 w-[90%]">
+      <div className="text-gray-400 mx-auto mt-7 py-2 px-2 md:ml-[2%] md:my-auto bg-[#0e1c35] rounded-2xl">
         <img
           src={formData.photo}
           alt="profile"
