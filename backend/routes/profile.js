@@ -17,6 +17,20 @@ profileRouter.get("/profile/view", userauth, async (req, res) => {
   }
 });
 
+profileRouter.get("/profile/view/:id", userauth, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = await usermodel.findById(id).select("-password");
+    if (!data) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ data });
+  } catch (err) {
+    res.status(400).json({ err });
+  }
+});
+
 profileRouter.patch("/profile/edit", userauth, async (req, res) => {
   try {
     // if (!validateprofileedit) {

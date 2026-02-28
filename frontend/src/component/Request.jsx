@@ -3,8 +3,10 @@ import { BASE_URL } from "../util/constant";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addrequest, removerequest } from "../util/requestslice";
+import { useNavigate } from "react-router-dom";
 const Request = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const connectionrequestlist = useSelector((store) => store.request);
   const handlereview = async (status, _id) => {
     try {
@@ -86,7 +88,10 @@ const Request = () => {
                     Reject
                   </button>
 
-                  <button className="rounded-lg bg-gray-200 border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300">
+                  <button
+                    onClick={() => navigate(`/view/${user._id}`)}
+                    className="rounded-lg bg-gray-200 border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
+                  >
                     View
                   </button>
                 </div>

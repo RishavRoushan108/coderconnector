@@ -1,8 +1,10 @@
 import axios from "axios";
 import { BASE_URL } from "../util/constant";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 const Connections = () => {
   const [connectionlist, setconnectionlist] = useState([]);
+  const navigate = useNavigate();
   const Loadconnections = async () => {
     try {
       const res = await axios.get(BASE_URL + "/user/connection", {
@@ -55,7 +57,10 @@ const Connections = () => {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-2 md:gap-3 lg:mr-[2%]">
-                  <button className="rounded-lg bg-gray-200 border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300">
+                  <button
+                    onClick={() => navigate(`/view/${item._id}`)}
+                    className="rounded-lg bg-gray-200 border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
+                  >
                     View
                   </button>
                 </div>

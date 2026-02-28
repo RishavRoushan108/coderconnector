@@ -8,6 +8,7 @@ import Signup from "./component/Signup";
 import Feed from "./component/Feed";
 import Connections from "./component/Connections";
 import Request from "./component/Request";
+import View from "./component/View";
 // import { Toaster } from "react-hot-toast";
 
 const Core = () => {
@@ -33,6 +34,7 @@ const Core = () => {
               <Route path="/feed" element={<Feed />} />
               <Route path="/connections" element={<Connections />} />
               <Route path="/request" element={<Request />} />
+              <Route path="/view/:id" element={<View />} />
             </Route>
           </Routes>
         </BrowserRouter>
