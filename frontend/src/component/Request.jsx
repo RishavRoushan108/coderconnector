@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addrequest, removerequest } from "../util/requestslice";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 const Request = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -16,8 +17,10 @@ const Request = () => {
         { withCredentials: true },
       );
       dispatch(removerequest(_id));
+      toast.success("request " + status + " successfully");
     } catch (err) {
       console.log(err);
+      toast.error("request " + status + " failed");
     }
   };
   const LoadRequest = async () => {

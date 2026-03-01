@@ -16,7 +16,6 @@ const Feed = () => {
       });
       let feedlist = result?.data?.user;
       dispatch(addfeed(feedlist));
-      console.log(feedlist[0]);
     } catch (err) {
       console.log(err);
     }

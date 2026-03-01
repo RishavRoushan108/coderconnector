@@ -15,16 +15,6 @@ const Core = () => {
   return (
     <div>
       <Provider store={store}>
-        {/* <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              background: "#1b263b",
-              color: "#fff",
-            },
-          }}
-        /> */}
         <BrowserRouter basename="/">
           <Routes>
             <Route path="/" element={<Body />}>

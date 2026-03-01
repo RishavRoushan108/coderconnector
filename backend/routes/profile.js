@@ -67,9 +67,9 @@ profileRouter.patch("/profile/changepassword", userauth, async (req, res) => {
     } else {
       throw new Error("invalid current password");
     }
-    res.status(200).send("password updated successfully");
+    res.status(200).json({ message: "password change successful" });
   } catch (err) {
-    res.status(400).send("password cannot update" + err.message);
+    res.status(400).json({ err });
   }
 });
 

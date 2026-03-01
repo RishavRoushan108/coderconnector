@@ -12,7 +12,6 @@ const View = () => {
         withCredentials: true,
       });
       setuser(data.data.data);
-      console.log(data);
     } catch (err) {
       console.log(err);
     }

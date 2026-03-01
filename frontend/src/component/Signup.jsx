@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../util/constant";
 import axios from "axios";
 
-// import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -21,7 +21,6 @@ const Signup = () => {
     skills: "",
     nationality: "",
   });
-  // toast.success("Login successful 🎉");
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -32,23 +31,24 @@ const Signup = () => {
   const handlesingup = async () => {
     try {
       if (
-        !formData.firstName.trim ||
-        !formData.lastName.trim ||
-        !formData.emailId.trim ||
-        !formData.password.trim ||
-        !formData.phoneNo.trim
+        formData.firstName === "" ||
+        formData.lastName === "" ||
+        formData.emailId === "" ||
+        formData.password === "" ||
+        formData.phoneNo === ""
       ) {
-        console.log("fill all compulary detail");
+        toast.error("fill all compulary detail");
         return;
       }
 
       await axios.post(BASE_URL + "/signup", formData, {
         withCredentials: true,
       });
-      console.log("signup successful");
+      toast.success("signup successful");
       navigate("/login");
     } catch (err) {
       console.log(err);
+      toast.error(err.response.data);
       //main error is that i have to show as toast is err.response.data
     }
   };

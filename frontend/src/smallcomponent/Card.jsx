@@ -3,6 +3,7 @@ import React from "react";
 import { BASE_URL } from "../util/constant";
 import { useDispatch } from "react-redux";
 import { removefeed } from "../util/feedslice";
+import toast from "react-hot-toast";
 
 const Card = ({ formData }) => {
   const dispatch = useDispatch();
@@ -14,10 +15,11 @@ const Card = ({ formData }) => {
         {},
         { withCredentials: true },
       );
-      console.log(response);
       dispatch(removefeed(_id));
+      toast.success("request send successfully");
     } catch (err) {
       console.log(err);
+      toast.error("something went wrong");
     }
   };
   return (

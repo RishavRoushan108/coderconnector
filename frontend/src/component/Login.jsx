@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { adduser } from "../util/userslice";
 import { BASE_URL } from "../util/constant";
 import { useNavigate } from "react-router-dom";
-// import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [emailId, setemailId] = useState("");
@@ -21,10 +21,11 @@ const Login = () => {
       );
 
       dispatch(adduser(res?.data?.user));
-      // toast.success("Login successful 🎉");
+      toast.success("Login successful 🎉");
       navigate("/feed");
     } catch (err) {
       console.log(err);
+      toast.error(err?.response.data);
     }
   };
 

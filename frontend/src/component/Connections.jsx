@@ -2,6 +2,7 @@ import axios from "axios";
 import { BASE_URL } from "../util/constant";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 const Connections = () => {
   const [connectionlist, setconnectionlist] = useState([]);
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const Connections = () => {
       setconnectionlist(res.data.data);
     } catch (err) {
       console.log(err);
+      toast.error("something went wrong ");
     }
   };
   useEffect(() => {
