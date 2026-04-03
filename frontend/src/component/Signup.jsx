@@ -48,7 +48,7 @@ const Signup = () => {
       navigate("/login");
     } catch (err) {
       console.log(err);
-      toast.error(err.response.data);
+      toast.error("signup failed");
       //main error is that i have to show as toast is err.response.data
     }
   };

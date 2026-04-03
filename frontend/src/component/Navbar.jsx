@@ -75,6 +75,14 @@ const Navbar = () => {
                 Requests
               </p>
               <p
+                onClick={() => {
+                  (navigate("/chat"), setOpen(false));
+                }}
+                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              >
+                Chat
+              </p>
+              <p
                 onClick={handleLogout}
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-500"
               >
