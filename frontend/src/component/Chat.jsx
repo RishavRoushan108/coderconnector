@@ -3,6 +3,7 @@ import axios from "axios";
 import { BASE_URL } from "../util/constant";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
 
 const Chat = () => {
   const [connectionlist, setconnectionlist] = useState([]);
@@ -13,6 +14,24 @@ const Chat = () => {
     { id: 3, sender: "me", text: "I’m good, working on Coder Connector 😄" },
     { id: 4, sender: "other", text: "Nice! Sounds cool 🔥" },
   ];
+  const [text, settext] = useState();
+  const socket = io("http://localhost:3000", {
+    withCredentials: true,
+  });
+  const sendMessage = () => {
+    if (!text) return;
+
+    socket.emit("send_message", {
+      senderId: user._id,
+      receiverId: selectedUser._id,
+      message: text,
+    });
+
+    // show instantly on sender side
+    setMessages((prev) => [...prev, { senderId: user._id, message: text }]);
+
+    settext("");
+  };
   useEffect(() => {
     const Loadconnections = async () => {
       try {
@@ -25,8 +44,19 @@ const Chat = () => {
         toast.error("something went wrong ");
       }
     };
+
     Loadconnections();
-  }, []);
+    socket.emit("register", user._id);
+
+    socket.on("receive_message", (data) => {
+      // show only if current chat
+      if (data.senderId === selectedUser._id) {
+        setMessages((prev) => [...prev, data]);
+      }
+    });
+
+    return () => socket.off("receive_message");
+  }, [selectedUser]);
   return (
     <div className="w-full h-125">
       <div className="w-[95%] border-gray-300 border-2 mx-auto h-full flex">
@@ -114,7 +144,12 @@ const Chat = () => {
               placeholder="Type a message..."
               className="flex-1 text-gray-400 p-2 rounded-lg outline-none"
             />
-            <button className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
+            <button
+              onClick={sendMessage}
+              value={text}
+              onChange={(e) => e.target.value}
+              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+            >
               Send
             </button>
           </div>
