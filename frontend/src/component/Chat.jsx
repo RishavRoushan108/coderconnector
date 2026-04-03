@@ -7,6 +7,12 @@ import { useNavigate } from "react-router-dom";
 const Chat = () => {
   const [connectionlist, setconnectionlist] = useState([]);
   const navigate = useNavigate();
+  const dummyMessages = [
+    { id: 1, sender: "me", text: "Hey bro 👋" },
+    { id: 2, sender: "other", text: "Hello! How are you?" },
+    { id: 3, sender: "me", text: "I’m good, working on Coder Connector 😄" },
+    { id: 4, sender: "other", text: "Nice! Sounds cool 🔥" },
+  ];
   useEffect(() => {
     const Loadconnections = async () => {
       try {
@@ -78,7 +84,41 @@ const Chat = () => {
             )}
           </div>
         </div>
-        <div className="w-[60%] h-full bg-[#223750]"></div>
+        <div className="w-[60%] h-full bg-[#223750] flex flex-col">
+          <div className="p-4 border-b border-gray-600 text-white font-semibold">
+            Chat
+          </div>
+          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            {dummyMessages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex ${
+                  msg.sender === "me" ? "justify-end" : "justify-start"
+                }`}
+              >
+                <div
+                  className={`px-4 py-2 rounded-lg max-w-[60%] text-sm ${
+                    msg.sender === "me"
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-300 text-black"
+                  }`}
+                >
+                  {msg.text}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="p-3 border-t border-gray-600 flex gap-2">
+            <input
+              type="text"
+              placeholder="Type a message..."
+              className="flex-1 text-gray-400 p-2 rounded-lg outline-none"
+            />
+            <button className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
+              Send
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
