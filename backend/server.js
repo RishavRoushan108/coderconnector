@@ -36,67 +36,63 @@ app.use("/", connectionRoute);
 app.use("/", chatRouter);
 
 // socket io setup
-// const io = new Server(server, {
-//   cors: {
-//     origin: "http://localhost:5173",
-//     credentials: true,
-//   },
-// });
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    credentials: true,
+  },
+});
 
-// const users = {}; // { userId: socketId }
+const users = {};
 
-// io.on("connection", (socket) => {
-//   console.log("User connected:", socket.id);
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
 
-//   // register user
-//   socket.on("register", (userId) => {
-//     users[userId] = socket.id;
-//   });
+  // ✅ Register user
+  socket.on("register", (userId) => {
+    if (!users[userId]) {
+      users[userId] = new Set();
+    }
+    users[userId].add(socket.id);
+  });
 
-//   // send message (ONLY between 2 users)
-//   socket.on("send_message", async (data) => {
-//     const { senderId, receiverId, message } = data;
+  // ✅ Send message
+  socket.on("send_message", async (data) => {
+    const { senderId, receiverId, message } = data;
 
-//     try {
-//       const newMessage = await chatModel.create({
-//         fromuserId: senderId,
-//         touserId: receiverId,
-//         message,
-//       });
+    try {
+      // ✅ Save correctly
+      const newMessage = await chatModel.create({
+        senderId,
+        receiverId,
+        message,
+      });
 
-//       const receiverSocket = users[receiverId];
+      const receiverSockets = users[receiverId] || new Set();
 
-//       if (receiverSocket) {
-//         io.to(receiverSocket).emit("receive_message", newMessage);
-//       }
-//     } catch (err) {
-//       console.log("Error saving message:", err);
-//     }
+      receiverSockets.forEach((id) => {
+        io.to(id).emit("receive_message", newMessage);
+      });
+    } catch (err) {
+      console.log("Error saving message:", err);
+    }
+  });
 
-//     const receiverSocket = users[receiverId];
+  // ✅ Disconnect cleanup
+  socket.on("disconnect", () => {
+    for (let userId in users) {
+      users[userId].delete(socket.id);
 
-//     if (receiverSocket) {
-//       io.to(receiverSocket).emit("receive_message", {
-//         senderId,
-//         message,
-//       });
-//     }
-//   });
-
-//   // remove user on disconnect
-//   socket.on("disconnect", () => {
-//     for (let userId in users) {
-//       if (users[userId] === socket.id) {
-//         delete users[userId];
-//         break;
-//       }
-//     }
-//   });
-// });
+      if (users[userId].size === 0) {
+        delete users[userId];
+      }
+    }
+  });
+});
 
 connectdb()
   .then(() => {
-    app.listen(process.env.PORT, () => {
+    server.listen(process.env.PORT, () => {
       console.log("app is listing on port 3000");
     });
   })

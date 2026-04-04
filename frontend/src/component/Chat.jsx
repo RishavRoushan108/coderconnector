@@ -6,31 +6,57 @@ import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 
+const socket = io("http://localhost:3000", {
+  withCredentials: true,
+});
+
 const Chat = () => {
   const [connectionlist, setconnectionlist] = useState([]);
-  const [text, settext] = useState();
+  const [text, settext] = useState("");
   const [Message, setMessages] = useState([]);
   const [selectedUser, setselectedUser] = useState(null);
   const navigate = useNavigate();
   const user = useSelector((store) => store.user);
 
-  // const socket = io("http://localhost:3000", {
-  //   withCredentials: true,
-  // });
-  // const sendMessage = () => {
-  //   if (!text) return;
+  const sendMessage = () => {
+    if (!text) return;
 
-  //   socket.emit("send_message", {
-  //     senderId: user._id,
-  //     receiverId: selectedUser._id,
-  //     message: text,
-  //   });
+    const msgData = {
+      senderId: user?.user?._id,
+      receiverId: selectedUser?._id,
+      message: text,
+    };
 
-  //   // show instantly on sender side
-  //   setMessages((prev) => [...prev, { senderId: user._id, message: text }]);
+    socket.emit("send_message", msgData);
+    setMessages((prev) => [...prev, msgData]);
 
-  //   settext("");
-  // };
+    settext("");
+  };
+
+  useEffect(() => {
+    const handleMessage = (data) => {
+      if (
+        selectedUser &&
+        (data.senderId === selectedUser._id ||
+          data.receiverId === selectedUser._id)
+      ) {
+        setMessages((prev) => [...prev, data]);
+      }
+    };
+
+    socket.on("receive_message", handleMessage);
+
+    return () => {
+      socket.off("receive_message", handleMessage);
+    };
+  }, [selectedUser]);
+
+  useEffect(() => {
+    if (user?.user?._id) {
+      socket.emit("register", user?.user?._id);
+    }
+  }, [user]);
+
   useEffect(() => {
     const Loadconnections = async () => {
       try {
@@ -44,17 +70,7 @@ const Chat = () => {
       }
     };
     Loadconnections();
-    // socket.emit("register", user._id);
-
-    // socket.on("receive_message", (data) => {
-    //   // show only if current chat
-    //   if (data.senderId === selectedUser._id) {
-    //     setMessages((prev) => [...prev, data]);
-    //   }
-    // });
-
-    // return () => socket.off("receive_message");
-  }, [selectedUser]);
+  }, []);
   useEffect(() => {
     if (!selectedUser) {
       return;
@@ -62,7 +78,7 @@ const Chat = () => {
     const loadmessage = async () => {
       try {
         const messagelist = await axios.get(
-          BASE_URL + "/chat/data/" + selectedUser,
+          BASE_URL + "/chat/data/" + selectedUser._id,
           {
             withCredentials: true,
           },
@@ -84,12 +100,12 @@ const Chat = () => {
           </div>
           <div className="flex-1 overflow-y-auto">
             {connectionlist.length > 0 ? (
-              connectionlist.map((item, index) => {
+              connectionlist.map((item) => {
                 return (
                   <div
-                    key={index}
+                    key={item._id}
                     onClick={() => {
-                      setselectedUser(item._id);
+                      setselectedUser(item);
                     }}
                     className="flex items-center justify-between p-3 border-b border-gray-700 hover:bg-[#243447] cursor-pointer"
                   >
@@ -172,9 +188,9 @@ const Chat = () => {
           ) : (
             <>
               <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                {Message.map((msg) => (
+                {Message.map((msg, index) => (
                   <div
-                    key={msg._id}
+                    key={index}
                     className={`flex ${
                       msg.senderId === user?.user?._id
                         ? "justify-end"
@@ -202,7 +218,7 @@ const Chat = () => {
                   className="flex-1 text-gray-400 p-2 rounded-lg outline-none"
                 />
                 <button
-                  // onClick={sendMessage}
+                  onClick={sendMessage}
                   className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
                 >
                   Send
