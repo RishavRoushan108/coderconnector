@@ -11,9 +11,23 @@ dotenv.config();
 import connectdb from "./database.js";
 
 import cors from "cors";
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://coderconnector.vercel.app", // Ensure NO trailing slash at the end
+];
+
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://coderconnector.vercel.app"],
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or Postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   }),
 );
@@ -36,11 +50,25 @@ app.use("/", connectionRoute);
 app.use("/", chatRouter);
 
 // socket io setup
+// const io = new Server(server, {
+//   cors: {
+//     origin: "http://localhost:5173",
+//     credentials: true,
+//   },
+// });
+
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   },
+  transports: ["polling"],
 });
 
 const users = {};
