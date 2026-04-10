@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
 
-const socket = io("http://localhost:3000", {
+const socket = io(BASE_URL, {
   withCredentials: true,
 });
 
