@@ -68,7 +68,7 @@ const io = new Server(server, {
     },
     credentials: true,
   },
-  transports: ["polling"],
+  transports: ["polling", "websocket"],
 });
 
 const users = {};
