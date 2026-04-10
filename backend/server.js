@@ -13,10 +13,7 @@ import connectdb from "./database.js";
 import cors from "cors";
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://coderconnectorbackend.vercel.app",
-    ],
+    origin: ["http://localhost:5173", "https://coderconnector.vercel.app"],
     credentials: true,
   }),
 );
