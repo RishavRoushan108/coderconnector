@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 
 const socket = io(BASE_URL, {
   withCredentials: true,
+  transports: ["websocket", "polling"],
 });
 
 const Chat = () => {
