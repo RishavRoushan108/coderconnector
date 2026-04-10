@@ -48,7 +48,6 @@ const users = {};
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
-  // ✅ Register user
   socket.on("register", (userId) => {
     if (!users[userId]) {
       users[userId] = new Set();
@@ -56,12 +55,10 @@ io.on("connection", (socket) => {
     users[userId].add(socket.id);
   });
 
-  // ✅ Send message
   socket.on("send_message", async (data) => {
     const { senderId, receiverId, message } = data;
 
     try {
-      // ✅ Save correctly
       const newMessage = await chatModel.create({
         senderId,
         receiverId,
@@ -78,7 +75,6 @@ io.on("connection", (socket) => {
     }
   });
 
-  // ✅ Disconnect cleanup
   socket.on("disconnect", () => {
     for (let userId in users) {
       users[userId].delete(socket.id);

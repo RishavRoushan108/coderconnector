@@ -61,7 +61,12 @@ authRouter.post("/signin", async (req, res) => {
     const ispasswordcorrect = await user.validatepassword(password);
     if (ispasswordcorrect) {
       const token = await user.JWT();
-      res.cookie("token", token);
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        maxAge: 3 * 24 * 60 * 60 * 1000,
+      });
       res.status(200).json({ message: "login successfull", user });
     } else {
       throw new Error("invalid emailid or password");
