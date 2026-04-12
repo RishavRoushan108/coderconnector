@@ -13,7 +13,7 @@ import connectdb from "./database.js";
 import cors from "cors";
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://coderconnector.vercel.app", // Ensure NO trailing slash at the end
+  "https://coderconnector.vercel.app",
 ];
 
 app.use(
