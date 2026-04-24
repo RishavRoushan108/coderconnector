@@ -14,7 +14,7 @@ import cors from "cors";
 const allowedOrigins = [
   "http://localhost:5173",
   "https://coderconnector.vercel.app",
-  "http://13.63.112.27/",
+  "http://13.63.112.27",
 ];
 
 app.use(
